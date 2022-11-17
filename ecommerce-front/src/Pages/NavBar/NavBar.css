@@ -1,0 +1,74 @@
+.NavBar {
+    font-size: large;
+    background-color: #008184;
+    width: 100%;
+}
+
+.NavBarBrand {
+    display: flex;
+    align-items: center;
+}
+
+.NavBarBrand :hover {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+}
+
+.NavBarTitle {
+    font-size: medium;
+    font-family: 'Press Start 2P';
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.5em;
+    text-align: center;
+}
+
+.Logo {
+    font-size: 4.5rem;
+    text-decoration: none;
+}
+
+.NavBarEnd {
+    justify-content: end;
+}
+
+.NavBarEnd :hover {
+    color: white;
+    text-decoration: none;
+}
+
+.Option {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    text-decoration: none;
+    font-size: large;
+    align-self: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Option :hover {
+    color: white;
+}
+
+.ActiveOption {
+    color: white;
+    text-decoration: none;
+    margin: 0 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ActiveOption :hover {
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+}
+
+.NavCategory {
+    padding: 0;
+}
+
+.Logout {
+    display: flex;
+    justify-content: space-between;
+}

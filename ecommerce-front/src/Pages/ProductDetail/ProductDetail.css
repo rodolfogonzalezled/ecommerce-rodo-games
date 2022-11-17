@@ -1,0 +1,33 @@
+.ProductDetail {
+    border-radius: 1%;
+    margin: 2%;
+}
+
+.ProductDetailTitle {
+    margin: 1rem 0;
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bold;
+}
+
+.ProductDetailImg {
+    width: 70%;
+    border-radius: 3%;
+}
+
+.ProductDetailText {
+    text-align: justify;
+    font-size: large;
+    line-height: 2;
+    padding: 1%;
+}
+
+.ContainerImg {
+    display: flex;
+    justify-content: center;
+    margin: 5%;
+}
+
+.DetailCount {
+    text-align: center;
+}

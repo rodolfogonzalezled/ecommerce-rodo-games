@@ -1,0 +1,12 @@
+.RegisterContainer {
+    width: 50%;
+    background: #ffffffbf;
+    border-radius: 2%;
+    padding: 1em;
+}
+
+.RegisterTitle {
+    text-align: center;
+    color: #008184;
+    padding: 3%;
+}

@@ -1,0 +1,34 @@
+.products {
+    text-align: center;
+    border-radius: 8%;
+    background-color: #fff;
+}
+
+.ProductsInfo {
+    border-top: outset;
+}
+
+.ProductsImg {
+    width: 80%;
+    align-self: center;
+    padding: 5% 0;
+    border-radius: 12%;
+}
+
+.ProductsImg:hover {
+    transform: scale(1.1);
+}
+
+.CardText {
+    padding-top: 3%;
+    border-top: outset;
+    font-size: large;
+}
+
+.CardInitial {
+    margin: 3%;
+}
+
+.btnItem {
+    margin-bottom: 5%;
+}

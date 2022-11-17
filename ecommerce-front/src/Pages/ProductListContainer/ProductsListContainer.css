@@ -1,0 +1,24 @@
+.Filters {
+    margin: 3%;
+}
+
+.InputName {
+    width: 60%;
+    margin-right: 5px
+}
+
+.TextUser {
+    color: #008184;
+    text-align: end;
+    margin: 3%;
+}
+
+.NoProducts {
+    text-align: center;
+    color: #008184;
+    padding: 12%;
+}
+
+.RowFilter {
+    width: 100%;
+}
