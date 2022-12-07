@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Container } from 'react-bootstrap';
-import './ProductsListContainer.css';
-import ProductService from '../../Services/productsService';
-import { createAlert } from '../../Utils/alerts';
-import { ALERT_STATUS } from '../../constants/alertStatus';
-import ProductList from "../ProductList";
+import '../ProductListContainer/ProductsListContainer.css';
+import ProductService from '../../../Services/productsService';
+import { createAlert } from '../../../Utils/alerts';
+import { ALERT_STATUS } from '../../../constants/alertStatus';
+import ProductList from "../../Product/ProductList";
 
 const ProductsListContainer = () => {
 

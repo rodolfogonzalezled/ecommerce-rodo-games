@@ -1,0 +1,17 @@
+.Loading {
+    display: flex;
+    justify-content: center;
+    padding: 9% 0%;
+    align-items: center;
+    flex-direction: column;
+}
+
+.LoadingText {
+    font-size: xx-large;
+    padding-left: 1em;
+}
+
+.Spinner {
+    width: 5em;
+    height: 5em;
+}

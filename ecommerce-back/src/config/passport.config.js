@@ -1,0 +1,81 @@
+import passport from 'passport';
+import local from 'passport-local';
+import jwt  from 'passport-jwt';
+import { cartService, userService } from '../services/service.js';
+import { cookieExtractor, createHash, isValidPassword } from "../utils/utils.js";
+import config from './config.js';
+
+const LocalStrategy = local.Strategy;
+const JWTStrategy =  jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
+
+const initializePassport = () => {
+    passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email', session: false }, async (req, email, password, done) => {
+        let { first_name, last_name, phone } = req.body;
+
+        try {
+            if (!req.file) return done(null, false, { message: "No se pudo cargar la imagen" })
+            let user = await userService.getBy({ email });
+            if (user) return done(null, false, { message: "El usuario ya existe" });
+            let cart = await cartService.save({ Products: [] });
+            const hashedPassword = await createHash(password);
+            const newUser = {
+                first_name,
+                last_name,
+                email,
+                password: hashedPassword,
+                cart: cart._id,
+                avatar: req.file.location,
+                phone
+            }
+            let result = await userService.save(newUser);
+            return done(null, result);
+        } catch (err) {
+            console.log(err);
+            return done(err);
+        }
+    }))
+
+    passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+        try {
+            if (!email || !password) return done(null, false, { message: "No se pudo cargar la imagen" })
+
+            if (email === config.app.ADMIN_EMAIL && password === config.app.ADMIN_PASSWORD) {
+                const admin = {
+                    id: 1,
+                    role: "admin",
+                }
+                return done(null, admin)
+            }
+
+            const user = await userService.getBy({ email });
+            if (!user) return done(null, false, { message: "No user found" });
+            if (!isValidPassword(user, password)) return done(null, false, { message: "Contraseña incorrecta" });
+
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        }
+    }))
+
+    passport.use('jwt', new JWTStrategy({ jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]), secretOrKey: config.jwt.SECRET }, async (jwt_payload, done) => {
+        try {
+            if (jwt_payload.role === "admin") return done(null, jwt_payload)
+            let user = await userService.getBy({ _id: jwt_payload.id })
+            if (!user) return done(null, false, { messages: "User not found" })
+            return done(null, user);
+        } catch (err) {
+            return done(err)
+        }
+    }))
+
+    passport.serializeUser((user, done) => {
+        done(null, user._id)
+    })
+    passport.deserializeUser(async (id, done) => {
+        let result = await userService.getBy({ _id: id })
+        return done(null, result);
+    })
+};
+
+export default initializePassport;

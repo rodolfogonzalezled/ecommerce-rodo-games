@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import ProductService from '../../Services/productsService';
-import ProductDetail from '../ProductDetail';
+import ProductService from '../../../Services/productsService';
+import ProductDetail from '../../Product/ProductDetail';
 
 const ProductDetailContainer = () => {
     const [product, setProduct] = useState();

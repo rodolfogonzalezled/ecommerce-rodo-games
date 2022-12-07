@@ -1,30 +1,36 @@
-import { cartService, userService } from "../services/service.js";
-import { createHash } from "../utils/utils.js";
+import config from "../config/config.js";
+import UserDtoToken from "../dto/Users.js"
+import jwt from "jsonwebtoken";
 
-const register = async (req, res) => {
-    let { first_name, last_name, email, phone, password } = req.body;
-    try {
-        if (!req.file) return res.status(500).send({ status: "error", error: "No se pudo cargar la imagen" });
-        let user = await userService.getBy({ email });
-        if (user) return res.status(400).send({ status: "error", error: "El usuario ya existe" });
-        let cart = await cartService.save({ Products: [] });
-        const hashedPassword = await createHash(password);
-        const newUser = {
-            first_name,
-            last_name,
-            email,
-            password: hashedPassword,
-            cart: cart._id,
-            avatar: req.file.location,
-            phone
-        }
-        let result = await userService.save(newUser);
-        res.send({ status: "success", message: "User added" })
-    } catch (error) {
-        res.status(500).send({ status: "error", error: "Error del servidor" });
+const login = async (req, res) => {
+    let user;
+    if (req.user.role !== "admin") {
+        user = new UserDtoToken(req.user).toObject();
+    } else {
+        user = req.user;
     }
+
+    const token = jwt.sign(user, config.jwt.SECRET, { expiresIn: "1h" });
+    return res.cookie(config.jwt.COOKIE, token, { maxAge: 3600000 }).send({ status: "success", payload: { user } });
+}
+
+const logout = async (req, res) => {
+    res.clearCookie(config.jwt.COOKIE);
+    res.send({ status: "success", message: "Sesión cerrada" })
+}
+
+const current = async (req, res) => {
+    let user;
+    if (req.user.role !== "admin") {
+        user = new UserDtoToken(req.user).toObject();
+    } else {
+        user = req.user;
+    }
+    res.send({ status: "success", payload: user });
 }
 
 export default {
-    register
+    login,
+    logout,
+    current
 }

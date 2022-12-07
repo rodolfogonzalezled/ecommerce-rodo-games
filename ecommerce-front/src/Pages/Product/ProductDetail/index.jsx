@@ -1,5 +1,5 @@
 import { Row, Col, Container, Button } from 'react-bootstrap'
-import './ProductDetail.css'
+import '../../Product/ProductDetail/ProductDetail.css'
 
 const ProductDetail = ({ _id, name, img, description, price, stock }) => {
     return (

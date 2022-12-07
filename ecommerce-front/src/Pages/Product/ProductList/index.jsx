@@ -1,5 +1,5 @@
-import ProductItem from '../ProductItem';
-import './ProductList.css';
+import ProductItem from '../../Product/ProductItem';
+import '../ProductList/ProductList.css';
 
 const ProductList = ({ products, handlerDeleteProduct }) => {
 

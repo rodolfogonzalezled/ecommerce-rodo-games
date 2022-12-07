@@ -1,0 +1,17 @@
+.CartWidget {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.CartCount {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 50%;
+    background-color: rgba(235, 13, 13, 0.90);
+}

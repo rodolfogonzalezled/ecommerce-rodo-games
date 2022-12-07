@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
-import './ProductEdit.css';
+import '../../Product/ProductEdit/ProductEdit.css';
 import 'react-phone-input-2/lib/bootstrap.css'
 import { useParams } from "react-router-dom";
-import { createAlertWithCallback } from "../../Utils/alerts.js";
-import { ALERT_STATUS } from "../../constants/alertStatus.js";
-import ProductService from '../../Services/productsService';
+import { createAlertWithCallback } from "../../../Utils/alerts.js";
+import { ALERT_STATUS } from "../../../constants/alertStatus.js";
+import ProductService from '../../../Services/productsService';
 import { useNavigate } from "react-router-dom";
 
 const ProductEdit = () => {

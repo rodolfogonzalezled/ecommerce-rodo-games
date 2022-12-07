@@ -1,0 +1,24 @@
+.LoginContainer {
+    padding: 0% 25% 3%;
+    text-align: center;
+}
+
+.LoginForm {
+    font-size: large;
+    color: #008184;
+    padding: 3%;
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.LoginTitle {
+    text-align: center;
+    color: #008184;
+    padding: 3%;
+}
+
+.LoginBtn {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 2% 0;
+}

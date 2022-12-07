@@ -1,11 +1,25 @@
 import { Link, NavLink } from "react-router-dom";
 import { BsController } from 'react-icons/bs';
+import { MdLogout } from 'react-icons/md';
 import { FaRegUserCircle } from 'react-icons/fa';
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { options } from "../../Utils/routes.js";
 import './NavBar.css';
+import { useContext } from "react";
+import UserContext from "../../context/UserContext.js";
 
 const NavBar = () => {
+    const { logOut, user } = useContext(UserContext);
 
+    const elements = options.filter(option => {
+        if (option.showWhen === true) return true;
+        if (user) {
+
+            return option.showWhen === user.role;
+        } else {
+            if (option.showWhen === false) return true;
+        }
+    })
     return (
         <div>
             <Navbar variant="dark" expand="lg" className="NavBar">
@@ -22,10 +36,19 @@ const NavBar = () => {
                     <Navbar.Toggle aria-controls="navbar-nav" />
                     <Navbar.Collapse className="NavBarEnd" id="navbar-nav">
                         <Nav>
-                            <Nav.Link as={NavLink} to='/new-product' className={({ isActive }) => isActive ? 'ActiveOption' : 'Option'}> Registrar Productos </Nav.Link>
-                            <Nav.Link as={NavLink} to='/register' className={({ isActive }) => isActive ? 'ActiveOption' : 'Option'}> Crea una cuenta </Nav.Link>
-                            <Nav.Link as={NavLink} to='/login' className={({ isActive }) => isActive ? 'ActiveOption' : 'Option'}> Login </Nav.Link>
-                            <FaRegUserCircle className="Option p-0" />
+                            {user && <>
+                                <img src={user.avatar} className="Option" alt={user.userName} />
+                                <NavDropdown title={user.userName} id="user">
+                                    <NavDropdown.Item as={Link} to={`/orders`}> Mis compras </NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item className="Logout" as={Link} to='/' onClick={() => logOut()}> Cerrar Sesión
+                                        <MdLogout className="align-self-center ms-3" />
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </>
+                            }
+
+                            {elements.map(element => <Nav.Link as={NavLink} key={element.path} to={element.path}>{element.label}</Nav.Link>)}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

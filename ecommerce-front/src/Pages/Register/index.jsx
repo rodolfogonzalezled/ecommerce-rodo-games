@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import './RegisterUser.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/bootstrap.css'
-import SessionService from "../../Services/sessionsService.js";
-import { useNavigate } from "react-router-dom";
-import { createAlertWithCallback } from "../../Utils/alerts.js";
-import { ALERT_STATUS } from "../../constants/alertStatus.js";
+import UserContext from "../../context/UserContext";
 
 const Register = () => {
+    const { registerUser } = useContext(UserContext);
     const [input, setInput] = useState({
         first_name: {
             value: "",
@@ -34,8 +32,6 @@ const Register = () => {
 
     const [image, setImage] = useState(null);
 
-    const navigation = useNavigate();
-
     const handleInputChange = (e) => {
         setInput((prev) => ({
             ...prev,
@@ -53,7 +49,6 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         let error = false;
-        debugger
         Object.keys(input).forEach(key => {
             if (input[key].value.trim().length === 0) {
                 error = true;
@@ -74,26 +69,13 @@ const Register = () => {
             form.append("password", input.password.value);
             form.append("avatar", image);
             form.append("phone", input.phone.value);
-            const service = new SessionService();
-            service.register({ body: form, callbackSuccess: callbackSuccessRegister, callbackError: callbackErrorRegister })
+            registerUser(form);
         }
     }
 
     const handleInputPhoneChange = (value, data, event, formattedValue) => {
         handleInputChange(event);
     }
-
-    // --------------------- Callbacks ---------------------------
-    const callbackSuccessRegister = (res) => {
-        const { data, status } = res;
-        console.log(data);
-        createAlertWithCallback(ALERT_STATUS.SUCCESS, 'Usuario registrado', 'Ahora puede loguearse en la página de ingreso', () => {
-            navigation('/login');
-        });
-    };
-    const callbackErrorRegister = (err) => {
-        console.log(err);
-    };
 
     return (
         <div>
