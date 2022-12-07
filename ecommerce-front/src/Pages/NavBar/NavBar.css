@@ -1,6 +1,6 @@
 .NavBar {
     font-size: large;
-    background-color: #008184;
+    background-image: linear-gradient(to bottom, #008184, #00ABB3);
     width: 100%;
 }
 

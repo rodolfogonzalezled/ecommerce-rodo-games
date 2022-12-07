@@ -1,4 +1,11 @@
-# Mejorar la esquema API restful - eCommerce Backend #
+<p align="center">
+  <a href="https://avatars.githubusercontent.com/u/95132476?v=4" target="blank"><img src="https://avatars.githubusercontent.com/u/95132476?v=4" width="200" alt="Nest Logo" /></a>
+</p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
+  <p align="center">Ecommerce Backend</p>
 
 ## _Autor: Rodolfo Gonzalez - Curso: Backend_
 
