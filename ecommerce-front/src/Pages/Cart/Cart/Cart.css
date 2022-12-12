@@ -1,22 +1,27 @@
 .Cart {
     font-size: larger;
-    color: #008184;
+    color: #251749;
     padding: 2%;
     border-radius: 10px;
-    background-color: lightgray;
+    background-color: #F1F1F1;
     margin: 0 5%;
     text-align: center;
 }
 
 .CartTitle {
     text-align: center;
-    color: #008184;
+    color: #251749;
     padding: 3%;
 }
 
 .CartContainer {
     text-align: justify;
-    color: #008184;
+    color: #251749;
+}
+
+.CartImg {
+    width: 2.5em;
+    border-radius: 15%;
 }
 
 .CartPrice {
@@ -35,6 +40,6 @@
 }
 
 .CartNoProducts {
-    color: #008184;
+    color: #251749;
     padding: 5%;
 }

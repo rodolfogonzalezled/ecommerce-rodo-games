@@ -1,5 +1,5 @@
 import config from "../config/config.js";
-import UserDtoToken from "../dto/Users.js"
+import UserDtoToken from "../dtos/users.dto.js"
 import jwt from "jsonwebtoken";
 
 const login = async (req, res) => {

@@ -161,11 +161,8 @@ const ProductEdit = () => {
                             <Form.Control type={"file"} onChange={handleImageChange} />
                         </Col>
                     </Row>
-
-
-                    <Button variant="outline-success" type="submit" onClick={handleSubmit}>
+                    <Button variant="outline-dark" type="submit" onClick={handleSubmit}>
                         {id ? "Modificar" : "Registrar"}
-
                     </Button>
                 </Form>
             </Container>

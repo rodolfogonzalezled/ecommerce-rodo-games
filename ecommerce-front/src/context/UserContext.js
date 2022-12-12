@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { ALERT_STATUS } from "../constants/alertStatus";
 import SessionService from "../Services/sessionsService";
 import { createAlert, createAlertWithCallback } from "../Utils/alerts";
-import { isLogged } from "../Utils/session";
 
 export const UserContext = createContext();
 
@@ -66,16 +65,16 @@ export const UserContextProvider = ({ children }) => {
 
     const logOut = () => {
         const service = new SessionService();
-        const callbackSuccessLogin = res => {
-            getUser();
+        const callbackSuccessLogOut = res => {
+            setUser(null);
             navigation('/login');
         }
 
-        const callbackErrorLogin = error => {
+        const callbackErrorLogOut = error => {
             createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
         }
 
-        service.logout(callbackSuccessLogin, callbackErrorLogin)
+        service.logout(callbackSuccessLogOut, callbackErrorLogOut)
     }
 
     return (

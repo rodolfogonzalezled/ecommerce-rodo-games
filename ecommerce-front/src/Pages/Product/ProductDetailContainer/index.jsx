@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { ALERT_STATUS } from '../../../constants/alertStatus';
 import ProductService from '../../../Services/productsService';
+import { createAlert } from '../../../Utils/alerts';
 import ProductDetail from '../../Product/ProductDetail';
 
 const ProductDetailContainer = () => {
     const [product, setProduct] = useState();
     const { id } = useParams();
+    const navigation = useNavigate();
 
     useEffect(() => {
         const service = new ProductService();
@@ -17,19 +20,18 @@ const ProductDetailContainer = () => {
         const { data, status } = res;
         setProduct(data.payload);
     };
-    const callbackErrorGetProduct = (err) => {
-        console.log(err);
+    const callbackErrorGetProduct = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
+        navigation('/');
     };
 
-    if (!product) {
-        return (<h1 className='NoProducts'> No se encontraron productos </h1>);
+    if (product) {
+        return (
+            <div>
+                <ProductDetail {...product} />
+            </div>
+        )
     }
-
-    return (
-        <div>
-            <ProductDetail {...product} />
-        </div>
-    )
 }
 
 export default ProductDetailContainer

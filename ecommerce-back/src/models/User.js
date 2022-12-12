@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export default class User {
     static get collection() {
-        return 'users';
+        return 'Users';
     }
 
     static get schema() {

@@ -66,8 +66,8 @@ const Login = () => {
                         </Col>
                     </Row>
                     <div className="LoginBtn">
-                        <Button variant="outline-success" type="submit"> Iniciar sesión </Button>
-                        <Button as={Link} to='/register' variant="outline-success"> Registrar usuario </Button>
+                        <Button variant="outline-dark" type="submit"> Iniciar sesión </Button>
+                        <Button as={Link} to='/register' variant="outline-dark"> Registrar usuario </Button>
                     </div>
                 </Form>
             </Container>

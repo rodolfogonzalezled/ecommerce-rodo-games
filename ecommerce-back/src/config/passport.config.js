@@ -49,8 +49,8 @@ const initializePassport = () => {
             }
 
             const user = await userService.getBy({ email });
-            if (!user) return done(null, false, { message: "No user found" });
-            if (!isValidPassword(user, password)) return done(null, false, { message: "Contraseña incorrecta" });
+            if (!user) return done(null, false, { message: "Usuario o Contraseña incorrecta" });
+            if (!isValidPassword(user, password)) return done(null, false, { message: "Usuario o Contraseña incorrecta" });
 
             return done(null, user);
         } catch (err) {
@@ -62,7 +62,7 @@ const initializePassport = () => {
         try {
             if (jwt_payload.role === "admin") return done(null, jwt_payload)
             let user = await userService.getBy({ _id: jwt_payload.id })
-            if (!user) return done(null, false, { messages: "User not found" })
+            if (!user) return done(null, false, { messages: "Usuario no encontrado" })
             return done(null, user);
         } catch (err) {
             return done(err)

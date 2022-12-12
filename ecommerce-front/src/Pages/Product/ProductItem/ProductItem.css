@@ -1,7 +1,7 @@
 .products {
     text-align: center;
     border-radius: 8%;
-    background-color: #fff;
+    background-image: linear-gradient(to bottom, #F1F1F1, #FAFAFA);
 }
 
 .ProductsInfo {
@@ -20,7 +20,7 @@
 }
 
 .CardText {
-    padding-top: 3%;
+    padding: 3%;
     border-top: outset;
     font-size: large;
 }

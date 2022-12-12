@@ -5,7 +5,7 @@ import { passportCall, upload } from '../utils/utils.js';
 const router = Router();
 
 router.post('/register', upload.single('avatar'), passportCall('register'), (req, res) => {
-    res.send({ status: "success", message: "User added" })
+    res.send({ status: "success", message: "Usuario Registrado" })
 })
 
 router.post('/login', passportCall('login'), sessionsController.login);

@@ -7,6 +7,7 @@ import { options } from "../../Utils/routes.js";
 import './NavBar.css';
 import { useContext } from "react";
 import UserContext from "../../context/UserContext.js";
+import CartWidget from "../Cart/CartWidget/index.jsx";
 
 const NavBar = () => {
     const { logOut, user } = useContext(UserContext);
@@ -37,10 +38,16 @@ const NavBar = () => {
                     <Navbar.Collapse className="NavBarEnd" id="navbar-nav">
                         <Nav>
                             {user && <>
-                                <img src={user.avatar} className="Option" alt={user.userName} />
+                                {user.avatar ? 
+                                <img src={user.avatar} className="Avatar" alt={user.userName} /> :
+                                <FaRegUserCircle className="Avatar" /> }
+
                                 <NavDropdown title={user.userName} id="user">
-                                    <NavDropdown.Item as={Link} to={`/orders`}> Mis compras </NavDropdown.Item>
-                                    <NavDropdown.Divider />
+                                    {user.role === 'user' && <>
+                                        <NavDropdown.Item as={Link} to={`/orders`}> Mis compras </NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                    </>}
+
                                     <NavDropdown.Item className="Logout" as={Link} to='/' onClick={() => logOut()}> Cerrar Sesión
                                         <MdLogout className="align-self-center ms-3" />
                                     </NavDropdown.Item>
@@ -49,6 +56,7 @@ const NavBar = () => {
                             }
 
                             {elements.map(element => <Nav.Link as={NavLink} key={element.path} to={element.path}>{element.label}</Nav.Link>)}
+                            <CartWidget />
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

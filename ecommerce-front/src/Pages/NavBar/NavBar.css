@@ -1,6 +1,6 @@
 .NavBar {
     font-size: large;
-    background-image: linear-gradient(to bottom, #008184, #00ABB3);
+    background-image: linear-gradient(to bottom, #4b1c71, #251749);
     width: 100%;
 }
 
@@ -38,15 +38,16 @@
     text-decoration: none;
 }
 
-.Option {
-    width: 2em;
-    height: 2em;
+.Avatar{
+    width: 1.5em;
+    height: 1.5em;
     border-radius: 1em;
     display: flex;
     align-self: center;
+    color: white;
 }
 
-.Option :hover {
+.Avatar :hover {
     color: white;
 }
 

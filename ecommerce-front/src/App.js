@@ -13,6 +13,7 @@ const Home = React.lazy(() => import('./Pages/Home'));
 const NavBar = React.lazy(() => import('./Pages/NavBar'));
 const ProductDetail = React.lazy(() => import('./Pages/Product/ProductDetailContainer'));
 const ProductEdit = React.lazy(() => import('./Pages/Product/ProductEdit'));
+const Orders = React.lazy(() => import('./Pages/Orders'));
 
 function App() {
     const { user } = useContext(UserContext);
@@ -22,23 +23,18 @@ function App() {
 
     return (
         <Suspense fallback="Loading...">
-            {/* <UserContextProvider> */}
-                <NavBar />
-                <Routes>
-                {/* <Route element={<PrivateRoute isLogged={isLogged()} />}> */}
-                        <Route path="/" element={<Home />} />;
-                        <Route path="/users" element={<Users />} />
-                        <Route path='/new-product' element={ <RequireAuth><ProductEdit /></RequireAuth>} />
-                        <Route path='/product/:id/edit' element={ <RequireAuth><ProductEdit /></RequireAuth>} />
-                        <Route path="/cart" element={ <RequireAuth><Cart /></RequireAuth>} />
-                    {/* </Route> */}
-                    {/* <Route element={<PublicRoute isLogged={isLogged()} />}> */}
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path='/product/:id' element={<ProductDetail />} />
-                    {/* </Route> */}
-                </Routes>
-            {/* </UserContextProvider> */}
+            <NavBar />
+            <Routes>
+                <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />;
+                <Route path="/users" element={<Users />} />
+                <Route path='/new-product' element={<RequireAuth onlyAdmin={true}><ProductEdit /></RequireAuth>} />
+                <Route path='/product/:id/edit' element={<RequireAuth onlyAdmin={true}><ProductEdit /></RequireAuth>} />
+                <Route path="/cart" element={<RequireAuth onlyUser={true}><Cart /></RequireAuth>} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path='/product/:id' element={<RequireAuth><ProductDetail /></RequireAuth>} />
+                <Route path="/orders" element={<RequireAuth onlyUser={true}><Orders /></RequireAuth>} />
+            </Routes>
         </Suspense>
     );
 }

@@ -1,0 +1,23 @@
+.ItemImg{
+    width: 55%;
+    height: 100%;
+    border-radius: 8%;
+}
+
+.OrderContainer {
+    margin: 5% 10%;
+}
+
+.OrderDetail {
+    display: flex;
+    justify-content: space-between;
+}
+.OrderTitle {
+    text-align: center;
+    color: #251749;
+    padding-top: 3%;
+}
+
+.DetailOrderTittle {
+    text-align: center;
+}
