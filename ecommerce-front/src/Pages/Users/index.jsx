@@ -20,7 +20,7 @@ const Users = () => {
     };
 
     return (<>
-        <h1>Hola Rodolfo Gonzalez!</h1>
+        <h1>Super Administrador Rodolfo Gonzalez!</h1>
     </>)
 };
 

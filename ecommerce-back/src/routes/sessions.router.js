@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import sessionsController from '../controllers/sessions.controller.js';
-import { passportCall, upload } from '../utils.js';
+import { passportCall, upload } from '../utils/utils.js';
 
 const router = Router();
 

@@ -1,5 +1,6 @@
 import { productService } from "../services/service.js";
 import ProductsDTO from "../dtos/products.dto.js";
+import { JOI_VALIDATOR } from "../utils/joi-validator.js";
 
 const getProducts = async (req, res) => {
     try {
@@ -25,15 +26,22 @@ const getProductById = async (req, res) => {
 const register = async (req, res) => {
     let { name, description, price, stock } = req.body;
     try {
-        if (!name || !description || !price || !stock) return res.status(400).send({ status: 'error', error: 'Campos incompletos' });
         if (!req.file) return res.status(500).send({ status: "error", error: "No se pudo cargar la imagen" });
+
         const newProduct = {
             name,
             description,
             price,
             stock,
             img: req.file.location
+        };
+        
+        //validación de producto 
+        const { error } = JOI_VALIDATOR.product.validate(newProduct);
+        if (error) {
+            return res.status(400).send({ status: "error", error: error.details[0].message });
         }
+
         let result = await productService.save(newProduct);
         res.send({ status: "success", message: "Producto agregado" })
     } catch (error) {
@@ -42,16 +50,27 @@ const register = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    let { name, description, price, stock } = req.body;
     try {
-        const product = {
-            name,
-            description,
-            price,
-            stock,
-            img: req?.file?.location
+        const { id } = req.params;
+        const product = await productService.getBy({ _id: id });
+        if (!product) return res.status(404).send({ status: "error", error: "Producto no encontrado" });
+
+        let { name, description, price, stock } = req.body;
+        const updateProduct = {
+            name: name || product.name,
+            description: description || product.name,
+            price: price || product.price,
+            stock: stock || product.stock,
+            img: req?.file?.location || product.img
         }
-        let result = await productService.update(req.params.id, product);
+
+        //validación de producto 
+        const { error } = JOI_VALIDATOR.product.validate(updateProduct);
+        if (error) {
+            return res.status(400).send({ status: "error", error: error.details[0].message });
+        }
+
+        await productService.update(req.params.id, updateProduct);
         res.send({ status: "success", message: "Producto actualizado" })
     } catch (error) {
         res.status(500).send({ status: "error", error: "Error del servidor" });

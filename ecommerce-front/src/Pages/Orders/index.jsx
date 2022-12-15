@@ -23,7 +23,6 @@ const Orders = () => {
 
     //callbacks
     const callbackSuccesGetOrders = (res) => {
-        debugger
         setOrders(res.data.payload)
     };
     const callbackErrorGetOrders = (error) => {
@@ -82,7 +81,7 @@ const Orders = () => {
     return (
         <div>
             <h1 className="OrderTitle">Mis Compras</h1>
-            <h3> Actualmente no pesee ninguna orden de compra asociada</h3>
+            <h3> Actualmente no posee ninguna orden de compra asociada</h3>
         </div>
     )
 

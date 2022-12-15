@@ -1,18 +1,18 @@
 import passport from 'passport';
 import local from 'passport-local';
-import jwt  from 'passport-jwt';
+import jwt from 'passport-jwt';
 import { cartService, userService } from '../services/service.js';
-import { cookieExtractor, createHash, isValidPassword } from "../utils.js";
+import { cookieExtractor, createHash, isValidPassword } from "../utils/utils.js";
 import config from './config.js';
+import { JOI_VALIDATOR } from '../utils/joi-validator.js';
 
 const LocalStrategy = local.Strategy;
-const JWTStrategy =  jwt.Strategy;
+const JWTStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email', session: false }, async (req, email, password, done) => {
         let { first_name, last_name, phone } = req.body;
-        if (!first_name || !last_name || !phone) return done(null, false, { message: "Campos incompletos" })
         try {
             if (!req.file) return done(null, false, { message: "No se pudo cargar la imagen" })
             let user = await userService.getBy({ email });
@@ -27,7 +27,14 @@ const initializePassport = () => {
                 cart: cart._id,
                 avatar: req.file.location,
                 phone
+            };
+
+            //validación de producto 
+            const { error } = JOI_VALIDATOR.user.validate({ ...newUser, password });
+            if (error) {
+                return done(null, false, { message: error.details[0].message });
             }
+
             let result = await userService.save(newUser);
             return done(null, result);
         } catch (err) {
@@ -37,7 +44,7 @@ const initializePassport = () => {
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
         try {
-            if (!email || !password) return done(null, false, { message: "No se pudo cargar la imagen" })
+            if (!email || !password) return done(null, false, { message: "Debe ingresar usuario y contraseña" })
 
             if (email === config.admin.EMAIL && password === config.admin.PASSWORD) {
                 const admin = {

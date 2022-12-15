@@ -1,13 +1,14 @@
 import OrdersDTO from "../dtos/orders.dto.js";
 import mailingService from "../services/Mailing.js";
 import { cartService, orderService, productService, userService } from "../services/service.js";
+import { JOI_VALIDATOR } from "../utils/joi-validator.js";
 
 const getOrders = async (req, res) => {
     try {
         let { email } = req.params;
         let orders = await orderService.getAll({ email: email });
         if (!orders) return res.status(404).send({ status: "error", error: "No existen ordenes registradas para el usuario" });
-        const ordersParsed = orders.map(order=> new OrdersDTO(order));
+        const ordersParsed = orders.map(order => new OrdersDTO(order));
 
         res.send({ status: "success", payload: ordersParsed })
     } catch (error) {
@@ -44,6 +45,12 @@ const saveOrder = async (req, res) => {
             total: precioTotal,
             number: await orderService.getNumberOrder(),
             items: items
+        }
+
+        //validación de producto 
+        const { error } = JOI_VALIDATOR.order.validate(newOrder);
+        if (error) {
+            return res.status(400).send({ status: "error", error: error.details[0].message });
         }
 
         let result = await orderService.save(newOrder);

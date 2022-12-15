@@ -26,7 +26,7 @@ function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />;
-                <Route path="/users" element={<Users />} />
+                <Route path="/users" element={<RequireAuth onlyAdmin={true}><Users /></RequireAuth>} />
                 <Route path='/new-product' element={<RequireAuth onlyAdmin={true}><ProductEdit /></RequireAuth>} />
                 <Route path='/product/:id/edit' element={<RequireAuth onlyAdmin={true}><ProductEdit /></RequireAuth>} />
                 <Route path="/cart" element={<RequireAuth onlyUser={true}><Cart /></RequireAuth>} />

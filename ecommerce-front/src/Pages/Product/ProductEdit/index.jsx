@@ -52,7 +52,6 @@ const ProductEdit = () => {
     };
 
     const handleImageChange = (e) => {
-        debugger
         setImage(e.target.files[0])
     }
 
