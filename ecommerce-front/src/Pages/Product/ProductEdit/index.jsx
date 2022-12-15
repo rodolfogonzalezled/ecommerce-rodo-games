@@ -3,10 +3,11 @@ import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import '../../Product/ProductEdit/ProductEdit.css';
 import 'react-phone-input-2/lib/bootstrap.css'
 import { useParams } from "react-router-dom";
-import { createAlertWithCallback } from "../../../Utils/alerts.js";
+import { createAlert, createAlertWithCallback } from "../../../Utils/alerts.js";
 import { ALERT_STATUS } from "../../../constants/alertStatus.js";
 import ProductService from '../../../Services/productsService';
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 const ProductEdit = () => {
     const initialValuesState = {
@@ -28,19 +29,18 @@ const ProductEdit = () => {
         }
     }
     const { id } = useParams();
-
     const [input, setInput] = useState(initialValuesState);
     const [image, setImage] = useState(null);
     const service = new ProductService();
     const navigation = useNavigate();
+    const inputRef = useRef(null);
 
     useEffect(() => {
         if (id) {
-            service.getById(id, callbackSuccessGetProduct, callbackErrorGetProduct);
+            service.getById(id, callbackSuccessGetProduct, callbackError);
         }
     }, [])
 
-    // --------------------- Callbacks ---------------------------
     const handleInputChange = (e) => {
         setInput((prev) => ({
             ...prev,
@@ -52,7 +52,12 @@ const ProductEdit = () => {
     };
 
     const handleImageChange = (e) => {
+        debugger
         setImage(e.target.files[0])
+    }
+
+    const resetFileInput = () => {
+        inputRef.current.value=null;
     }
 
     const handleSubmit = (e) => {
@@ -77,40 +82,32 @@ const ProductEdit = () => {
             form.append("price", input.price.value);
             form.append("stock", input.stock.value);
             form.append("img", image);
+
             if (id) {
-                service.update({ id, body: form, callbackSuccess: callbackSuccessUpdate, callbackError: callbackErrorUpdate })
+                service.update(id, form, callbackSuccessUpdate, callbackError);
             } else {
-                service.register({ body: form, callbackSuccess: callbackSuccessRegister, callbackError: callbackErrorRegister })
+                service.register(form, callbackSuccessRegister, callbackError);
             }
         }
     }
 
     // --------------------- Callbacks ---------------------------
     const callbackSuccessRegister = (res) => {
-        const { data, status } = res;
         createAlertWithCallback(ALERT_STATUS.SUCCESS, 'Producto registrado', '', () => {
             setInput(initialValuesState);
+            resetFileInput();
         });
-    };
-    const callbackErrorRegister = (err) => {
-        console.log(err);
     };
 
     const callbackSuccessUpdate = (res) => {
         createAlertWithCallback(ALERT_STATUS.SUCCESS, 'Producto Modificado', '', () => {
             setInput(initialValuesState);
-
             navigation('/');
         });
     };
-    const callbackErrorUpdate = (err) => {
-        console.log(err);
-    };
 
     const callbackSuccessGetProduct = (res) => {
-        const { data, status } = res;
-
-        const product = data.payload;
+        const product = res.data.payload;
         Object.keys(input).forEach(key => {
             setInput((prev) => ({
                 ...prev,
@@ -122,9 +119,9 @@ const ProductEdit = () => {
         })
     };
 
-    const callbackErrorGetProduct = (err) => {
-        console.log(err);
-    }
+    const callbackError = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
+    };
 
     return (
         <div>
@@ -138,7 +135,7 @@ const ProductEdit = () => {
                             {input.name.error && <p style={{ color: "red" }}>{input.name.error}</p>}
                         </Col>
                         <Col sm>
-                            <Form.Label>Description: </Form.Label>
+                            <Form.Label>Descripción: </Form.Label>
                             <Form.Control type="text" name="description" value={input.description.value} onChange={handleInputChange} required />
                             {input.description.error && <p style={{ color: "red" }}>{input.description.error}</p>}
                         </Col>
@@ -146,19 +143,19 @@ const ProductEdit = () => {
                     <Row>
                         <Col sm>
                             <Form.Label>Precio:</Form.Label>
-                            <Form.Control type="text" name="price" value={input.price.value} onChange={handleInputChange} required />
+                            <Form.Control type="number" name="price" value={input.price.value} onChange={handleInputChange} required />
                             {input.price.error && <p style={{ color: "red" }}>{input.price.error}</p>}
                         </Col>
                         <Col sm>
                             <Form.Label>Stock:</Form.Label>
-                            <Form.Control name="stock" type={"text"} value={input.stock.value} onChange={handleInputChange} required />
+                            <Form.Control name="stock" type="number" value={input.stock.value} onChange={handleInputChange} required />
                             {input.stock.error && <p style={{ color: "red" }}>{input.stock.error}</p>}
                         </Col>
                     </Row>
                     <Row>
                         <Col sm>
                             <Form.Label>Imagen</Form.Label>
-                            <Form.Control type={"file"} onChange={handleImageChange} />
+                            <Form.Control ref={inputRef} type={"file"} onChange={handleImageChange} />
                         </Col>
                     </Row>
                     <Button variant="outline-dark" type="submit" onClick={handleSubmit}>

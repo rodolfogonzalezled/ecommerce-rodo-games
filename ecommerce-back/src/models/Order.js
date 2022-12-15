@@ -8,7 +8,7 @@ export default class Order {
 
     static get schema () {
         return {
-            full_name: { type: String, required: true },
+            user_name: { type: String, required: true },
             email: { type: String, required: true },
             total: { type:Number, required: true },
             number: { type:Number, required: true },

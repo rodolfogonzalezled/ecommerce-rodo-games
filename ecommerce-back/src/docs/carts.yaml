@@ -1,0 +1,171 @@
+components:
+  requestBodies:
+    agregarProductoCarrito:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: Cantidad de productos a agregar
+      example:
+        quantity: 5
+  schemas:
+    Cart:
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            id:
+              type: ObjectId
+              description: Id autogenerada por mongo
+        quantity:
+          type: number
+          description: Cantidad de productos a agregar
+      example:
+        id: 6394aa52dc40fdc3a281523
+        products: [
+          {
+            product: {
+              id: 6394aa52dc40fdc3a2815b8c,
+            },
+            quenatity: 2
+          }
+        ]
+    CartWithPopulate:
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            id:
+              type: ObjectId
+              description: Id autogenerada por mongo
+            name:
+              type: string
+              description: Nombre del producto
+            description:
+              type: string
+              description: Descripción del producto
+            img:
+              type: string
+              description: URL de la Foto del producto
+            price:
+              type: number
+              description: Precio del producto
+            stock:
+              type: number
+              description: Stock disponible del producto
+        quantity:
+          type: number
+          description: Cantidad de productos a agregar
+      example:
+        id: 6394aa52dc40fdc3a281523
+        products: [
+          {
+            product: {
+              id: 6394aa52dc40fdc3a2815b8c,
+              name: NBA 2K23,
+              description: Juego de Basket,
+              img: https://uploads-rgonzalez-bucket.s3.amazonaws.com/16706873130041666288943745perfil%20Linkedin.jfif,
+              price: 5000,
+              stock: 500
+            },
+            quenatity: 2
+          }
+        ]
+paths:
+  /api/carts/:
+    get:
+      summary: Obtiene todos los carritos
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Los carritos se obtuvieron correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+  /api/carts/{idCart}:
+    detele:
+      summary: Vaciar carrito
+      tags:
+        - Carts
+      parameters:
+      - name: idCart
+        in: path
+        required: true
+        description: Id referente al carrito
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Carrito vacío
+  /api/carts/{idCart}/products:
+    get:
+      summary: Obtener productos en el carrito
+      tags:
+        - Carts
+      parameters:
+      - name: idCart
+        in: path
+        required: true
+        description: Id referente al carrito
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Carrito encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartWithPopulate"
+  /api/carts/{idCart}/product/{idProd}:
+    post:
+      summary: Agregar producto al carrito
+      tags:
+        - Carts
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/agregarProductoCarrito'
+      parameters:
+      - name: idCart
+        in: path
+        required: true
+        description: Id referente al carrito
+        schema:
+          type: string
+      - name: idProd
+        in: path
+        required: true
+        description: Id referente al producto
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Producto agregado al carrito
+    delete:
+      summary: Eliminar producto del carrito
+      tags:
+        - Carts
+      parameters:
+      - name: idCart
+        in: path
+        required: true
+        description: Id referente al carrito
+        schema:
+          type: string
+      - name: idProd
+        in: path
+        required: true
+        description: Id referente al producto
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Producto eliminado del carrito

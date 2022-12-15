@@ -1,27 +1,31 @@
 import { useContext } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
+import { ALERT_STATUS } from '../../../constants/alertStatus';
 import CartContext from '../../../context/CartContext';
 import UserContext from '../../../context/UserContext';
 import OrderService from '../../../Services/orderService';
+import { createAlert } from '../../../Utils/alerts';
 import '../Cart/Cart.css';
 
 const Cart = () => {
     const { user } = useContext(UserContext);
-    const { cart, getCart, addItem, removeItem, subTotal, total, emptyCart } = useContext(CartContext);
+    const { cart, addItem, removeItem, subTotal, total, emptyCart } = useContext(CartContext);
 
     const createOrder = () => {
         if (cart.products.length > 0 && user) {
             const service = new OrderService();
-            service.createOrder(user.id, callbackSuccessCreateOrder, callbackErrorCreateOrder);
+            service.createOrder(user.cart, callbackSuccessCreateOrder, callbackErrorCreateOrder);
         }
     };
-
+    
+    //Callbacks
     const callbackSuccessCreateOrder = (res) => {
-        console.log(res)
+        createAlert(ALERT_STATUS.SUCCESS, '', '🛒 Su compra se ha realizado exitosamente');
     };
-    const callbackErrorCreateOrder = (err) => {
-        console.log(err);
+    const callbackErrorCreateOrder = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
     };
+
     if (cart) {
         return (
             <div>

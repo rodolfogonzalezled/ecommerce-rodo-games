@@ -18,12 +18,12 @@ export default class ProductService {
         this.client.makeGetRequest(requestInfo);
     }
 
-    register = ({ body, callbackSuccess, callbackError }) => {
+    register = (body, callbackSuccess, callbackError) => {
         const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_PRODUCTS_ENDPOINT}`, body, callbackSuccess, callbackError }
         this.client.makePostRequest(requestInfo);
     }
 
-    update = ({ id, body, callbackSuccess, callbackError }) => {
+    update = (id, body, callbackSuccess, callbackError) => {
         const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_PRODUCTS_ENDPOINT}/${id}`, body, callbackSuccess, callbackError }
         this.client.makePutRequest(requestInfo);
     }

@@ -1,12 +1,15 @@
 export default {
+    app: {
+        PORT: process.env.PORT || 9090,
+    },
     mongo: {
         USER: process.env.MONGO_USER,
         PWD: process.env.MONGO_PWD,
         DATABASE: process.env.MONGO_DATABASE,
     },
-    app: {
-        ADMIN_EMAIL: process.env.ADMIN_EMAIL,
-        ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    admin: {
+        EMAIL: process.env.ADMIN_EMAIL,
+        PASSWORD: process.env.ADMIN_PASSWORD,
     },
     aws: {
         ACCESS_KEY: process.env.AWS_ACCESS_KEY,
@@ -19,5 +22,9 @@ export default {
     nodemailer: {
         EMAIL: process.env.NODEMAILER_EMAIL,
         PASSWORD: process.env.NODEMAILER_PASSWORD,
+    },
+    cors:{
+        URL: process.env.CORS_URL,
     }
+    
 }

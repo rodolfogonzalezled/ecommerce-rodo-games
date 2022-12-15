@@ -4,8 +4,9 @@ export default class UserDtoToken {
         this.email = user.email;
         this.role = user.role;
         this.cart = user.cart;
-        this.userName = `${user.first_name} ${user.last_name}`;
+        this.user_name = `${user.first_name} ${user.last_name}`;
         this.avatar = user.avatar;
+        this.phone = user.phone;
     }
     toObject = () => {
         return {
@@ -13,8 +14,9 @@ export default class UserDtoToken {
             email: this.email,
             role: this.role,
             cart: this.cart,
-            userName: this.userName,
-            avatar: this.avatar
+            user_name: this.user_name,
+            avatar: this.avatar,
+            phone: this.phone
         }
     }
 }

@@ -5,6 +5,6 @@ const router = Router();
 
 router.get('/:email', ordersController.getOrders);
 
-router.post('/:idUser', ordersController.saveOrder);
+router.post('/:idCart', ordersController.saveOrder);
 
 export default router;

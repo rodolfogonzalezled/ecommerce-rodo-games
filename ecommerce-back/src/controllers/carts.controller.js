@@ -1,22 +1,11 @@
 import CartsDTO from "../dtos/carts.dto.js";
 import { cartService, productService } from "../services/service.js";
 
-const saveCart = async (req, res) => {
+const getCarts = async (req, res) => {
     try {
-        let idProd = req.body.id;
-        let product = [];
-        if (idProd) {
-            let result = await productService.getBy({ _id: idProd });
-            if (!product) return res.status(404).send({ status: "error", error: "Producto no encontrado" });
-            product.push({product: result._id});
-        }
-
-        let newCart = {
-            products: product
-        };
-
-        await cartService.save(newCart);
-        res.send({ status: "success", message: "Carrito creado" })
+        const carts = await cartService.getAll();
+        const cartsParsed = carts.map(cart => new CartsDTO(cart));
+        res.send({ status: "success", payload: cartsParsed })
     } catch (error) {
         res.status(500).send({ status: "error", error: "Error del servidor" });
     }
@@ -48,7 +37,7 @@ const addProductCart = async (req, res) => {
         }
 
         await cartService.update(idCart, cart);
-        res.send({ status: "success", message: "Producto agregado al carrito"})
+        res.send({ status: "success", message: "Producto agregado al carrito" })
 
     } catch (error) {
         res.status(500).send({ status: "error", error: "Error del servidor" });
@@ -57,12 +46,12 @@ const addProductCart = async (req, res) => {
 
 const emptyCart = async (req, res) => {
     try {
-        let id = req.params.id;
-        let cart = await cartService.getBy({ _id: id });
+        let { idCart } = req.params;
+        let cart = await cartService.getBy({ _id: idCart });
         if (!cart) return res.status(404).send({ status: "error", error: "Carrito no encontrado" });
 
         cart.products = [];
-        await cartService.update(id, cart);
+        await cartService.update(idCart, cart);
         res.send({ status: "success", message: "Carrito vacío" })
     } catch (error) {
         res.status(500).send({ status: "error", error: "Error del servidor" });
@@ -71,7 +60,7 @@ const emptyCart = async (req, res) => {
 
 const getProductsCart = async (req, res) => {
     try {
-        let result = await cartService.getByWithPopulate({ _id: req.params.id });
+        let result = await cartService.getByWithPopulate({ _id: req.params.idCart });
         if (!result) return res.status(404).send({ status: "error", error: "Carrito no encontrado" });
         let parsedCart = new CartsDTO(result);
         res.send({ status: "success", payload: parsedCart })
@@ -105,7 +94,7 @@ const deleteProductsCart = async (req, res) => {
 }
 
 export default {
-    saveCart,
+    getCarts,
     addProductCart,
     emptyCart,
     getProductsCart,

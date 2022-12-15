@@ -2,8 +2,13 @@ import bcrypt from "bcrypt";
 import aws from "aws-sdk";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import config from "../config/config.js";
+import config from "./config/config.js";
 import passport from 'passport';
+import {fileURLToPath} from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const createHash = async (password) => {
     const salts = await bcrypt.genSalt(10);
@@ -50,3 +55,5 @@ export const cookieExtractor = req => {
     }
     return token;
 }
+
+export default __dirname;

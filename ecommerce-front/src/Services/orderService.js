@@ -8,13 +8,13 @@ export default class OrderService {
         this.client = new AxiosClient();
     }
 
-    getByUser = (idUser, callbackSuccess, callbackError) => {
-        const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_ORDERS_ENDPOINT}/${idUser}`, config: getHeaders(), callbackSuccess, callbackError };
+    getByUser = (email, callbackSuccess, callbackError) => {
+        const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_ORDERS_ENDPOINT}/${email}`, config: getHeaders(), callbackSuccess, callbackError };
         this.client.makeGetRequest(requestInfo);
     }
 
-    createOrder = (idUser, callbackSuccess, callbackError) => {
-        const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_ORDERS_ENDPOINT}/${idUser}`, body: null, callbackSuccess, callbackError }
+    createOrder = (idCart, callbackSuccess, callbackError) => {
+        const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_ORDERS_ENDPOINT}/${idCart}`, body: null, callbackSuccess, callbackError }
         this.client.makePostRequest(requestInfo);
     }
 }

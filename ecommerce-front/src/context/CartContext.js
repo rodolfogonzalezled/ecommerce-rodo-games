@@ -13,44 +13,23 @@ export const CartContextProvider = ({ children }) => {
     useEffect(() => {
         getCart();
     }, [user])
-    
+
     const getCart = () => {
-        if (user) {
-            service.getById(user.cart, callbackSuccessGetCart, callbackErrorGetCart);
+        if (user && user.role === 'user') {
+            service.getById(user.cart, callbackSuccessGetCart, callbackError);
         } else {
             setCart(null);
         }
     }
-    const callbackSuccessGetCart = (res) => {
-        const { data } = res;
-        setCart(data.payload);
-    };
-    const callbackErrorGetCart = (err) => {
-        console.log(err);
-    };
 
     const addProduct = (idProd, quantity) => {
-        service.addProductCart(cart.id, idProd, { quantity }, callbackSuccessAddProduct, callbackErrorAddProduct);
+        service.addProductCart(cart.id, idProd, { quantity }, callbackSuccessAddProduct, callbackError);
     }
-
-    const callbackSuccessAddProduct = (res) => {
-        createAlert(ALERT_STATUS.SUCCESS, '', '🛒 Producto agregado al carrito exitosamente');
-    };
-    const callbackErrorAddProduct = (err) => {
-        console.log(err);
-    };
 
     const emptyCart = () => {
-        service.emptyCart(cart.id, null, null)
+        service.emptyCart(cart.id, callbackSuccessEmptyCart, callbackError)
         if (cart.products.length > 0) {
-            createAlert(ALERT_STATUS.WARNING, '', '🛒 Se ha vaciado el carrito');
-        }
-    }
-
-    const endCart = () => {
-        if (cart.length > 0) {
-            setCart([])
-            createAlert(ALERT_STATUS.SUCCESS, '', 'Su compra ha finalizado correctamente');
+            createAlert(ALERT_STATUS.SUCCESS, '', '🛒 Se ha vaciado el carrito');
         }
     }
 
@@ -77,10 +56,10 @@ export const CartContextProvider = ({ children }) => {
 
     const removeItem = (idProd, quantity) => {
         if (quantity <= 1) {
-            service.deleteProductCart(cart.id, idProd, callbackSuccessAddProduct, callbackErrorAddProduct);
+            service.deleteProductCart(cart.id, idProd, callbackSuccessRemoveItem, callbackError);
         } else {
             quantity -= 1;
-            service.addProductCart(cart.id, idProd, { quantity }, callbackSuccessAddProduct, callbackErrorAddProduct);
+            service.addProductCart(cart.id, idProd, { quantity }, callbackSuccessRemoveItem, callbackError);
         }
     }
 
@@ -89,6 +68,23 @@ export const CartContextProvider = ({ children }) => {
             return cart.products.find(item => item.product.id === idProd) ? true : false;
         }
     }
+
+    //Callbacks
+    const callbackSuccessGetCart = (res) => {
+        setCart(res.data.payload);
+    };
+    const callbackSuccessAddProduct = (res) => {
+        createAlert(ALERT_STATUS.SUCCESS, '', '🛒 Producto agregado al carrito exitosamente');
+    };
+    const callbackSuccessEmptyCart = (res) => {
+        setCart(res.data.payload);
+    };
+    const callbackSuccessRemoveItem = (res) => {
+        createAlert(ALERT_STATUS.SUCCESS, '', '🛒 Producto eliminado del carrito exitosamente');
+    };
+    const callbackError = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
+    };
 
     return (
         <CartContext.Provider value={{
@@ -101,7 +97,6 @@ export const CartContextProvider = ({ children }) => {
             addItem,
             removeItem,
             getIsProductInCart,
-            endCart,
             getCart
         }}>
             {children}

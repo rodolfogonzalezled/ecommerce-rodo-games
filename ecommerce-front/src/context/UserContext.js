@@ -7,6 +7,7 @@ import { createAlert, createAlertWithCallback } from "../Utils/alerts";
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
+    const service = new SessionService();
     const navigation = useNavigate();
     const [user, setUser] = useState(false);
     useEffect(() => {
@@ -14,69 +15,49 @@ export const UserContextProvider = ({ children }) => {
     }, [])
 
     const getUser = () => {
-            const service = new SessionService();
-
-            const callbackSuccessRegister = (res) => {
-                const user = res.data.payload;
-                if(user) setUser(user);
-            };
-    
-            const callbackErrorRegister = (error) => {
-                setUser(null);
-            };
-            service.current(callbackSuccessRegister, callbackErrorRegister)
-    }
+        service.current(callbackSuccessGetCurrentUser, callbackErrorGetCurrentUser);
+    };
 
     const registerUser = (user) => {
-        const service = new SessionService();
-
-        const callbackSuccessRegister = (res) => {
-            createAlertWithCallback(ALERT_STATUS.SUCCESS, 'Usuario registrado', 'Ahora puede loguearse en la página de ingreso', () => {
-                navigation('/login');
-            });
-        };
-
-        const callbackErrorRegister = (error) => {
-            createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
-        };
-
-        service.register({ body: user, callbackSuccess: callbackSuccessRegister, callbackError: callbackErrorRegister })
+        service.register(user, callbackSuccessRegister, callbackError);
     }
 
     const login = (email, password) => {
-        const service = new SessionService();
         const sendObject = {
             email,
             password
         }
-
-        const callbackSuccessLogin = res => {
-            const { user } = res.data.payload;
-            setUser(user);
-            navigation('/');
-        }
-
-        const callbackErrorLogin = error => {
-            createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
-        }
-
-        service.login({ body: sendObject, callbackSuccess: callbackSuccessLogin, callbackError: callbackErrorLogin })
+        service.login(sendObject, callbackSuccessLogin, callbackError)
     }
 
     const logOut = () => {
-        const service = new SessionService();
-        const callbackSuccessLogOut = res => {
-            setUser(null);
-            navigation('/login');
-        }
-
-        const callbackErrorLogOut = error => {
-            createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
-        }
-
-        service.logout(callbackSuccessLogOut, callbackErrorLogOut)
+        service.logout(callbackSuccessLogOut, callbackError)
     }
 
+    //Callbacks
+    const callbackSuccessGetCurrentUser = (res) => {
+        const user = res.data.payload;
+        if (user) setUser(user);
+    };
+    const callbackErrorGetCurrentUser = (error) => {
+        setUser(null);
+    };
+    const callbackSuccessRegister = (res) => {
+        createAlertWithCallback(ALERT_STATUS.SUCCESS, 'Usuario registrado', 'Ahora puede loguearse en la página de ingreso', () => {
+            navigation('/login');
+        });
+    };
+    const callbackSuccessLogin = res => {
+        setUser(res.data.payload);
+        navigation('/');
+    }
+    const callbackSuccessLogOut = res => {
+        setUser(null);
+        navigation('/login');
+    }
+    const callbackError = error => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
+    }
     return (
         <UserContext.Provider value={{
             user,

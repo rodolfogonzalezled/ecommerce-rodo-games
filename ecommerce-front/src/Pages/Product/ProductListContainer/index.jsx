@@ -7,33 +7,27 @@ import { ALERT_STATUS } from '../../../constants/alertStatus';
 import ProductList from "../../Product/ProductList";
 
 const ProductsListContainer = () => {
-
     const [products, setProducts] = useState([]);
     const service = new ProductService();
 
     useEffect(() => {
-        service.getAll(callbackSuccessGetProducts, callbackErrorGetProducts);
+        service.getAll(callbackSuccessGetProducts, callbackError);
     }, [])
 
     const handlerDeleteProduct = (id) => {
-        service.delete(id, callbackSuccessDeleteProduct, callbackErrorDeleteProduct);
+        service.delete(id, callbackSuccessDeleteProduct, callbackError);
     };
 
     // --------------------- Callbacks ---------------------------
     const callbackSuccessGetProducts = (res) => {
-        const { data, status } = res;
-        setProducts(data.payload);
+        setProducts(res.data.payload);
     };
-    const callbackErrorGetProducts = (err) => {
-        console.log(err);
-    };
-
     const callbackSuccessDeleteProduct = (res) => {
-        createAlert(ALERT_STATUS, 'Producto eliminado', 'Se ha eliminado el producto con éxito');
-        service.getAll(callbackSuccessGetProducts, callbackErrorGetProducts);
+        createAlert(ALERT_STATUS.SUCCESS, 'Producto eliminado', 'Se ha eliminado el producto con éxito');
+        service.getAll(callbackSuccessGetProducts, callbackError);
     };
-    const callbackErrorDeleteProduct = (err) => {
-        console.log(err);
+    const callbackError = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
     };
 
     return (

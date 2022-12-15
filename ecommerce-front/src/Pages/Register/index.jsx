@@ -4,6 +4,8 @@ import './RegisterUser.css';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/bootstrap.css'
 import UserContext from "../../context/UserContext";
+import { createAlert } from "../../Utils/alerts";
+import { ALERT_STATUS } from "../../constants/alertStatus";
 
 const Register = () => {
     const { registerUser } = useContext(UserContext);
@@ -21,6 +23,10 @@ const Register = () => {
             error: ""
         },
         password: {
+            value: "",
+            error: ""
+        },
+        passwordRepeat: {
             value: "",
             error: ""
         },
@@ -62,14 +68,18 @@ const Register = () => {
             }
         })
         if (!error) {
-            let form = new FormData();
-            form.append("first_name", input.first_name.value);
-            form.append("last_name", input.last_name.value);
-            form.append("email", input.email.value);
-            form.append("password", input.password.value);
-            form.append("avatar", image);
-            form.append("phone", input.phone.value);
-            registerUser(form);
+            if (input.password.value === input.passwordRepeat.value) {
+                let form = new FormData();
+                form.append("first_name", input.first_name.value);
+                form.append("last_name", input.last_name.value);
+                form.append("email", input.email.value);
+                form.append("password", input.password.value);
+                form.append("avatar", image);
+                form.append("phone", input.phone.value);
+                registerUser(form);
+            } else {
+                createAlert(ALERT_STATUS.ERROR, 'Contraseña', 'Los campos de contraseña no coinciden');
+            }
         }
     }
 
@@ -100,13 +110,6 @@ const Register = () => {
                             <Form.Control type="text" name="email" value={input.email.value} onChange={handleInputChange} required />
                             {input.email.error && <p style={{ color: "red" }}>{input.email.error}</p>}
                         </Col>
-                        <Col sm>
-                            <Form.Label>Contraseña:</Form.Label>
-                            <Form.Control name="password" type={"password"} value={input.password.value} onChange={handleInputChange} required />
-                            {input.password.error && <p style={{ color: "red" }}>{input.password.error}</p>}
-                        </Col>
-                    </Row>
-                    <Row>
                         <Col sm={6}>
                             <Form.Label>Telefono:</Form.Label>
                             <PhoneInput
@@ -121,14 +124,30 @@ const Register = () => {
                             />
                             {input.phone.error && <p style={{ color: "red" }}>{input.phone.error}</p>}
                         </Col>
+                    </Row>
+                    <Row>
                         <Col sm={6}>
+                            <Form.Label>Contraseña:</Form.Label>
+                            <Form.Control name="password" type={"password"} value={input.password.value} onChange={handleInputChange} required />
+                            {input.password.error && <p style={{ color: "red" }}>{input.password.error}</p>}
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Label>Repetir Contraseña:</Form.Label>
+                            <Form.Control name="passwordRepeat" type={"password"} value={input.passwordRepeat.value} onChange={handleInputChange} required />
+                            {input.passwordRepeat.error && <p style={{ color: "red" }}>{input.passwordRepeat.error}</p>}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={12}>
                             <Form.Label>Imagen de Perfil</Form.Label>
                             <Form.Control type={"file"} onChange={handleImageChange} />
                         </Col>
                     </Row>
-                    <Button variant="outline-dark" type="submit" onClick={handleSubmit}>
-                        Registrarse
-                    </Button>
+                    <Row className='RegisterBtn' sm={4}>
+                        <Button variant="outline-dark" type="submit" onClick={handleSubmit}>
+                            Registrarse
+                        </Button>
+                    </Row>
                 </Form>
             </Container>
         </div>

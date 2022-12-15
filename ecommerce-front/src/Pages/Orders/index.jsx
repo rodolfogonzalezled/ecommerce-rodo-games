@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Card, Col, ListGroup, Row } from 'react-bootstrap';
+import { ALERT_STATUS } from '../../constants/alertStatus';
 import UserContext from '../../context/UserContext';
 import OrderService from '../../Services/orderService';
+import { createAlert } from '../../Utils/alerts';
 import './Orders.css';
 
 const Orders = () => {
@@ -19,15 +21,16 @@ const Orders = () => {
         service.getByUser(user.email, callbackSuccesGetOrders, callbackErrorGetOrders);
     };
 
+    //callbacks
     const callbackSuccesGetOrders = (res) => {
-        const { data, status } = res;
-        setOrders(data.payload)
+        debugger
+        setOrders(res.data.payload)
     };
-    const callbackErrorGetOrders = (err) => {
-        console.log(err);
+    const callbackErrorGetOrders = (error) => {
+        createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);
     };
 
-    if (orders) {
+    if (orders && orders.length > 0) {
         return (
             <div>
                 <h1 className="OrderTitle">Mis Compras</h1>
@@ -37,7 +40,7 @@ const Orders = () => {
                             <h4 className='DetailOrderTittle'><b>Detalle de la compra</b></h4>
                             <div className='OrderDetail'>
                                 <div>
-                                    <h6><b>Nombre de Usuario: </b> {order.full_name}</h6>
+                                    <h6><b>Nombre de Usuario: </b> {order.user_name}</h6>
                                     <h6><b>Email: </b> {order.email}</h6>
                                 </div>
                                 <div>
@@ -76,6 +79,13 @@ const Orders = () => {
             </div>
         )
     }
+    return (
+        <div>
+            <h1 className="OrderTitle">Mis Compras</h1>
+            <h3> Actualmente no pesee ninguna orden de compra asociada</h3>
+        </div>
+    )
+
 }
 
 export default Orders;

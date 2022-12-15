@@ -1,0 +1,49 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: ObjectId
+          description: Id autogenerada por mongo
+        user_name:
+          type: string
+          description: Es la concatenacion de first_name y last_name
+        email:
+          type: string
+          description: Correo único del usuario
+        role:
+          type: string
+          description: Rol del usuario
+        phone:
+          type: string
+          description: Teléfono del usuario
+        avatar:
+          type: string
+          description: URL de la Foto del usuario
+        cart:
+          type: ObjectId
+          description: Id autogenerada por mongo para el carrito asociado a este usuario
+      example:
+        id: 6394aa52dc40fdc3a2815b8c
+        user_name: Rodolfo Gonzalez
+        email: rodolfo@correo.com
+        role: user
+        cart: 6394aa52dc40fdc3a2815b8a
+        avatar: https://uploads-rgonzalez-bucket.s3.amazonaws.com/16706873130041666288943745perfil%20Linkedin.jfif
+        phone: +54 5555555555
+paths:
+  /api/users/:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Los usuarios se obtuvieron correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'

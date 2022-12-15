@@ -17,8 +17,7 @@ const ProductDetailContainer = () => {
 
     // --------------------- Callbacks ---------------------------
     const callbackSuccessGetProduct = (res) => {
-        const { data, status } = res;
-        setProduct(data.payload);
+        setProduct(res.data.payload);
     };
     const callbackErrorGetProduct = (error) => {
         createAlert(ALERT_STATUS.ERROR, 'Error', error?.response?.data?.error ?? error.message);

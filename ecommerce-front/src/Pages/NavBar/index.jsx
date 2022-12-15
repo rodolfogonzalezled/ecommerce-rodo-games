@@ -39,10 +39,10 @@ const NavBar = () => {
                         <Nav>
                             {user && <>
                                 {user.avatar ? 
-                                <img src={user.avatar} className="Avatar" alt={user.userName} /> :
+                                <img src={user.avatar} className="Avatar" alt={user.user_name} /> :
                                 <FaRegUserCircle className="Avatar" /> }
 
-                                <NavDropdown title={user.userName} id="user">
+                                <NavDropdown title={user.user_name} id="user">
                                     {user.role === 'user' && <>
                                         <NavDropdown.Item as={Link} to={`/orders`}> Mis compras </NavDropdown.Item>
                                         <NavDropdown.Divider />

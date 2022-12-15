@@ -1,0 +1,95 @@
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: ObjectId
+          description: Id autogenerada por mongo
+        user_name:
+          type: string
+          description: Es la concatenacion de first_name y last_name del usuario que realizó la compra
+        email:
+          type: string
+          description: Correo único del usuario que realizó la compra
+        total:
+          type: number
+          description: Monto total de la compra
+        number:
+          type: number
+          description: Número de la orden
+        created_at:
+          type: string
+          description: Fecha de creación de la orden
+        items:
+          type: array
+          properties:
+            name:
+              type: string
+              description: Nombre del producto comprado
+            price:
+              type: number
+              description: Precio del producto al momento de la compra
+            img:
+              type: string
+              description: Url de la imagen del producto
+            quantity:
+              type: number
+              description: Cantidad de comprada del producto
+      example:
+        status: success,
+        payload: [
+          {
+            id: 6394aa52dc40fdc3a2815b8c,
+            user_name: Rodolfo Gonzalez,
+            email: rodolfo@correo.com,
+            total: 20000,
+            number: 1,
+            created_at: 2022-12-11T18:08:50.461Z,
+            items: [
+              {
+                name: NBA2K23,
+                price: 20000,
+                img: https://uploads-rgonzalez-bucket.s3.sa-east-1.amazonaws.com/1670688139677nba-2k23.webp,
+                quantity: 1
+              }
+            ]
+          }
+        ]
+paths:
+  /api/orders/{email}:
+    get:
+      summary: Devuelve las ordenes de las compras realizadas por el usuario con ese email
+      tags:
+        - Orders
+      parameters:
+      - name: email
+        in: path
+        required: true
+        description: Email del usuario
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ordenes encontradas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /api/orders/{idCart}:
+    post:
+      summary: Devuelve las ordenes de las compras realizadas por el usuario con ese email
+      tags:
+        - Orders
+      parameters:
+      - name: idCart
+        in: path
+        required: true
+        description: Id referente al Carrito
+        schema:
+          type: string
+      requestBody:
+        required: false
+      responses:
+        "200":
+          description: Orden creada

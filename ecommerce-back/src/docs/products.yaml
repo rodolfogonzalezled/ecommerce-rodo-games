@@ -1,0 +1,137 @@
+components:
+  requestBodies:
+    registroOModificacionProducto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        img:
+          type: string
+          format: binary
+          description: Foto del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Stock disponible del producto
+      example:
+        name: NBA 2K23
+        description: Juego de Basket
+        img: archivo seleccionado de foto
+        price: 5000
+        stock: 500
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: ObjectId
+          description: Id autogenerada por mongo
+        name:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        img:
+          type: string
+          description: URL de la Foto del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Stock disponible del producto
+      example:
+        id: 6394aa52dc40fdc3a2815b8c
+        name: NBA 2K23
+        description: Juego de Basket
+        img: https://uploads-rgonzalez-bucket.s3.amazonaws.com/16706873130041666288943745perfil%20Linkedin.jfif
+        price: 5000
+        stock: 500
+paths:
+  /api/products/:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos se obtuvieron correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Registra un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/requestBodies/registroOModificacionProducto'
+      responses:
+        "200":
+          description: Producto Registrado
+  /api/products/{id}:
+    get:
+      summary: Devuelve información de un producto en específico
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id referente al producto
+        schema:
+          type: string
+      responses:
+        "200":
+          description: El producto fue encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    put:
+      summary: Modifica un producto específico
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id referente al producto
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/requestBodies/registroOModificacionProducto'
+      responses:
+        "200":
+          description: Producto modificado
+    delete:
+      summary: Eliminar un producto
+      tags:
+        - Products
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Id referente al producto
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Producto eliminado

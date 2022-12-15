@@ -8,12 +8,12 @@ export default class SessionService {
         this.client = new AxiosClient();
     }
 
-    register = ({ body, callbackSuccess, callbackError }) => {
+    register = (body, callbackSuccess, callbackError) => {
         const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_SESSIONS_ENDPOINT}/register`, body, callbackSuccess, callbackError }
         this.client.makePostRequest(requestInfo);
     }
 
-    login = ({ body, callbackSuccess, callbackError }) => {
+    login = (body, callbackSuccess, callbackError) => {
         const requestInfo = { url: `${REACT_APP_BASE_URL}${REACT_APP_SESSIONS_ENDPOINT}/login`, body, config:getHeaders(), callbackSuccess, callbackError }
         this.client.makePostRequest(requestInfo);
     }

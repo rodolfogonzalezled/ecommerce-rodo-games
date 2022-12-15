@@ -17,11 +17,11 @@ const getOrders = async (req, res) => {
 
 const saveOrder = async (req, res) => {
     try {
-        let { idUser } = req.params;
-        const user = await userService.getBy({ _id: idUser });
+        let { idCart } = req.params;
+        const user = await userService.getBy({ cart: idCart });
         if (!user) return res.status(404).send({ status: "error", error: "Usuario no encontrado" });
 
-        const cart = await cartService.getByWithPopulate({ _id: user.cart });
+        const cart = await cartService.getByWithPopulate({ _id: idCart });
         if (!cart) return res.status(404).send({ status: "error", error: "Carrito no encontrado" });
 
         if (!cart.products.length) return res.status(404).send({ status: "error", error: "No posee productos en el carrito para generar una orden de compra" });
@@ -39,7 +39,7 @@ const saveOrder = async (req, res) => {
         });
 
         const newOrder = {
-            full_name: `${user.first_name} ${user.last_name}`,
+            user_name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             total: precioTotal,
             number: await orderService.getNumberOrder(),
@@ -48,12 +48,10 @@ const saveOrder = async (req, res) => {
 
         let result = await orderService.save(newOrder);
         sendMail(result._id);
-
         //actualizar stock de productos
         cart.products.forEach(async (prod) => {
             await productService.update(prod.product._id, { stock: prod.product.stock - prod.quantity });
         });
-
         //vaciar Carrito
         cart.products = [];
         await cartService.update(cart.id, cart);
@@ -67,7 +65,7 @@ const saveOrder = async (req, res) => {
 const sendMail = async (idOrder) => {
     let order = await orderService.getBy({ _id: idOrder });
 
-    let subject = `Nuevo pedido de ${order.full_name}, ${order.email}`;
+    let subject = `Nuevo pedido de ${order.user_name}, ${order.email}`;
 
     let html = `
         <tr>

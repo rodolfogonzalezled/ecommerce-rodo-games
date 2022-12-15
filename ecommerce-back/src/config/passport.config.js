@@ -2,7 +2,7 @@ import passport from 'passport';
 import local from 'passport-local';
 import jwt  from 'passport-jwt';
 import { cartService, userService } from '../services/service.js';
-import { cookieExtractor, createHash, isValidPassword } from "../utils/utils.js";
+import { cookieExtractor, createHash, isValidPassword } from "../utils.js";
 import config from './config.js';
 
 const LocalStrategy = local.Strategy;
@@ -12,7 +12,7 @@ const ExtractJwt = jwt.ExtractJwt;
 const initializePassport = () => {
     passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email', session: false }, async (req, email, password, done) => {
         let { first_name, last_name, phone } = req.body;
-
+        if (!first_name || !last_name || !phone) return done(null, false, { message: "Campos incompletos" })
         try {
             if (!req.file) return done(null, false, { message: "No se pudo cargar la imagen" })
             let user = await userService.getBy({ email });
@@ -31,7 +31,6 @@ const initializePassport = () => {
             let result = await userService.save(newUser);
             return done(null, result);
         } catch (err) {
-            console.log(err);
             return done(err);
         }
     }))
@@ -40,7 +39,7 @@ const initializePassport = () => {
         try {
             if (!email || !password) return done(null, false, { message: "No se pudo cargar la imagen" })
 
-            if (email === config.app.ADMIN_EMAIL && password === config.app.ADMIN_PASSWORD) {
+            if (email === config.admin.EMAIL && password === config.admin.PASSWORD) {
                 const admin = {
                     id: 1,
                     role: "admin",

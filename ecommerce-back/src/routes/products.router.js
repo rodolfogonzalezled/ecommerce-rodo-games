@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import productsController from '../controllers/products.controller.js';
-import { upload } from '../utils/utils.js';
+import { upload } from '../utils.js';
 
 const router = Router();
 
 router.get('/', productsController.getProducts);
 
-router.get('/:id?', productsController.getProductById);
+router.get('/:id', productsController.getProductById);
 
 router.post('/', upload.single('img'), productsController.register);
 

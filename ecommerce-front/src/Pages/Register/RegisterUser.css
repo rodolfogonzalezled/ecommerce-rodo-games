@@ -10,3 +10,8 @@
     color: #251749;
     padding: 3%;
 }
+
+.RegisterBtn {
+    justify-content: center;
+    margin: 3%;
+}

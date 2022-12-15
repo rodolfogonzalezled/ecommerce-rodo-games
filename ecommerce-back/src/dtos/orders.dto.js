@@ -1,7 +1,7 @@
 export default class OrdersDTO {
     constructor(order) {
         this.id = order._id;
-        this.full_name = order.full_name;
+        this.user_name = order.user_name;
         this.email = order.email;
         this.total = order.total;
         this.number = order.number;

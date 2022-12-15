@@ -7,19 +7,20 @@ export default class User {
 
     static get schema() {
         return {
-            first_name: String,
-            last_name: String,
-            password: String,
-            email: String,
+            first_name: { type: String, required: true },
+            last_name: { type: String, required: true },
+            password: { type: String, required: true },
+            email: { type: String, required: true },
             role: {
                 type: String,
                 enum: ['user', 'admin'],
                 default: 'user'
             },
-            avatar: String,
-            phone: String,
+            avatar: { type: String, required: true },
+            phone: { type: String, required: true },
             cart:{
                 type:mongoose.SchemaTypes.ObjectId,
+                required: true,
                 ref: 'Carts'
             }
         }

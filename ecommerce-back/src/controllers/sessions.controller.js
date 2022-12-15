@@ -11,7 +11,7 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(user, config.jwt.SECRET, { expiresIn: "1h" });
-    return res.cookie(config.jwt.COOKIE, token, { maxAge: 3600000 }).send({ status: "success", payload: { user } });
+    return res.cookie(config.jwt.COOKIE, token, { maxAge: 3600000 }).send({ status: "success", payload: user });
 }
 
 const logout = async (req, res) => {
