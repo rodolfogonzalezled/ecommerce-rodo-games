@@ -6,7 +6,7 @@ import Order from "./Order.js";
 
 export default class Dao {
     constructor(config) {
-        this.mongoose = mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@cluster0.mstabwq.mongodb.net/${config.mongo.DATABASE}?retryWrites=true&w=majority`);
+        this.mongoose = mongoose.connect(`mongodb+srv://${config.mongo.USER}:${config.mongo.PWD}@serverrodo.nz3ed4l.mongodb.net/${config.mongo.DATABASE}?retryWrites=true&w=majority&appName=ServerRodo`);
 
         const timestamps = { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 
